@@ -5,6 +5,27 @@
 
 export type Status = "existing" | "proposed" | "demo";
 
+// ---------------------------------------------------------------------------
+// Problem section — problem, its consequence, and what actually addresses it
+// ---------------------------------------------------------------------------
+
+export interface ProblemItem {
+  problem: string;
+  consequence: string;
+  solution: string;
+}
+
+export const PROBLEMS: ProblemItem[] = [
+  { problem: "Website that doesn't convert", consequence: "Traffic arrives, but leads don't.", solution: "Conversion optimization" },
+  { problem: "Disconnected business processes", consequence: "Teams duplicate work and lose context.", solution: "A connected digital workflow" },
+  { problem: "Poor user experience", consequence: "Visitors leave before they understand the offer.", solution: "UI/UX design" },
+  { problem: "Manual workflows", consequence: "Time-consuming, error-prone operations.", solution: "A purpose-built digital product" },
+  { problem: "Difficult product discovery", consequence: "Customers can't find what they'd actually buy.", solution: "SuperShowroom" },
+  { problem: "Scattered customer information", consequence: "No single view of a lead or client.", solution: "A connected CRM workflow" },
+  { problem: "No visibility into user behavior", consequence: "Decisions get made on guesswork.", solution: "Data-informed optimization" },
+  { problem: "Digital products that don't solve the actual business problem", consequence: "Expensive tools nobody actually uses.", solution: "Product thinking built around real workflows" },
+];
+
 export interface NavItem {
   label: string;
   href: string;
@@ -260,6 +281,7 @@ export interface Industry {
   solutionDescription: string;
   ctaLabel: string;
   href: string;
+  visual: "stats" | "workflow" | "grid";
 }
 
 export const INDUSTRIES: Industry[] = [
@@ -271,6 +293,7 @@ export const INDUSTRIES: Industry[] = [
     solutionDescription: "Simplify institutional operations and student management.",
     ctaLabel: "Explore Education Solution",
     href: "/products/vilms",
+    visual: "stats",
   },
   {
     key: "corporate",
@@ -280,6 +303,7 @@ export const INDUSTRIES: Industry[] = [
     solutionDescription: "Manage gifting from catalogue to quotation to fulfilment.",
     ctaLabel: "Explore Corporate Solution",
     href: "/products/gifting-solutions",
+    visual: "workflow",
   },
   {
     key: "retail",
@@ -289,6 +313,7 @@ export const INDUSTRIES: Industry[] = [
     solutionDescription: "Present the product range in a structured, digital showroom.",
     ctaLabel: "Explore Retail Solution",
     href: "/products/supershowroom",
+    visual: "grid",
   },
   {
     key: "smes",
@@ -298,6 +323,7 @@ export const INDUSTRIES: Industry[] = [
     solutionDescription: "Rebuild the digital presence around a clear path to a lead.",
     ctaLabel: "Explore SME Solution",
     href: "/#services-build",
+    visual: "workflow",
   },
   {
     key: "product-businesses",
@@ -307,98 +333,151 @@ export const INDUSTRIES: Industry[] = [
     solutionDescription: "Give the product range a digital presence built to be explored.",
     ctaLabel: "Explore Product Solution",
     href: "/products/supershowroom",
+    visual: "grid",
   },
 ];
 
 // ---------------------------------------------------------------------------
-// Solution finder (Section 7)
+// Solution finder (Section 7) — a two-step configurator: goal x business type
 // ---------------------------------------------------------------------------
 
-export interface FinderOption {
-  key: string;
+export interface FinderGoal {
+  key: "build" | "grow" | "digitize";
   label: string;
-  recommendationTitle: string;
-  recommendationDescription: string;
+  description: string;
+}
+
+export const FINDER_GOALS: FinderGoal[] = [
+  { key: "build", label: "Build", description: "A brand and a digital presence worth trusting" },
+  { key: "grow", label: "Grow", description: "More visibility and a better-converting site" },
+  { key: "digitize", label: "Digitize", description: "Replace a manual workflow with a product" },
+];
+
+export interface FinderBusinessType {
+  key: "education" | "corporate" | "retail" | "sme";
+  label: string;
+}
+
+export const FINDER_BUSINESS_TYPES: FinderBusinessType[] = [
+  { key: "education", label: "Education" },
+  { key: "corporate", label: "Corporate" },
+  { key: "retail", label: "Retail / Product" },
+  { key: "sme", label: "SME" },
+];
+
+export interface FinderRecommendation {
+  title: string;
+  description: string;
+  why: string;
   tags: string[];
   href: string;
   /** Exact match against FORM_HELP_OPTIONS, used to prefill the lead form. */
   helpOption: string;
 }
 
-export const FINDER_OPTIONS: FinderOption[] = [
-  {
-    key: "digital-presence",
-    label: "I need to build my digital presence",
-    recommendationTitle: "Branding + Website Design & Development",
-    recommendationDescription: "Start with a clear identity, then a website built to carry it.",
+// Keyed as "{goal}-{businessType}" — every combination is intentional, not generated.
+export const FINDER_MATRIX: Record<string, FinderRecommendation> = {
+  "build-education": {
+    title: "Branding + Website Design & Development",
+    description: "A credible identity and a website built for how institutes are actually evaluated.",
+    why: "Before enrollment or operations tooling matters, an institute needs a digital presence parents and students trust.",
     tags: ["Branding", "Websites"],
     href: "/#services-brand",
     helpOption: "Website design & development",
   },
-  {
-    key: "improve-website",
-    label: "I need to improve my website",
-    recommendationTitle: "UI/UX + Conversion Optimization",
-    recommendationDescription: "Diagnose where visitors drop off, then redesign around that evidence.",
-    tags: ["UI/UX", "Conversion Optimization"],
-    href: "/#services-experience",
-    helpOption: "UI/UX",
+  "build-corporate": {
+    title: "Branding + Website Design & Development",
+    description: "A clear identity and a website built to represent the business properly.",
+    why: "Brand and web presence come first — growth and product work compound on top of a credible foundation.",
+    tags: ["Branding", "Websites"],
+    href: "/#services-brand",
+    helpOption: "Website design & development",
   },
-  {
-    key: "better-ux",
-    label: "I need better user experience",
-    recommendationTitle: "UI/UX Design + Research",
-    recommendationDescription: "Understand how people actually use the product before redesigning it.",
-    tags: ["UI/UX", "Research"],
-    href: "/#services-experience",
-    helpOption: "UI/UX",
+  "build-retail": {
+    title: "Branding + SuperShowroom",
+    description: "A strong identity paired with a structured digital showroom for the product range.",
+    why: "A product range needs a credible brand and a proper digital home before growth work can compound.",
+    tags: ["Branding", "SuperShowroom"],
+    href: "/products/supershowroom",
+    helpOption: "SuperShowroom",
   },
-  {
-    key: "more-leads",
-    label: "I need more leads",
-    recommendationTitle: "SEO + Conversion Optimization",
-    recommendationDescription: "Combine visibility with a site that converts the traffic it earns.",
+  "build-sme": {
+    title: "Branding + Website Design & Development",
+    description: "Start with a clear identity, then a website built to carry it.",
+    why: "Most SMEs need a credible digital foundation before any growth or product work makes sense.",
+    tags: ["Branding", "Websites"],
+    href: "/#services-brand",
+    helpOption: "Website design & development",
+  },
+  "grow-education": {
+    title: "SEO + Conversion Optimization",
+    description: "Visibility and a conversion path built around how families actually enquire.",
+    why: "Once the digital presence exists, growth work determines whether it actually brings enrollments.",
     tags: ["SEO", "Conversion Optimization"],
     href: "/#services-grow",
     helpOption: "SEO / Conversion optimization",
   },
-  {
-    key: "digitize-operations",
-    label: "I need to digitize business operations",
-    recommendationTitle: "Explore Our Products",
-    recommendationDescription: "VILMS, SuperShowroom and Gifting Solutions are each built around a specific operational workflow.",
-    tags: ["VILMS", "SuperShowroom", "Gifting Solutions"],
-    href: "/#products",
-    helpOption: "Not sure yet",
+  "grow-corporate": {
+    title: "SEO + Conversion Optimization",
+    description: "Turn an existing presence into a consistent pipeline of qualified leads.",
+    why: "Growth work is what converts an existing website into a reliable source of pipeline.",
+    tags: ["SEO", "Conversion Optimization"],
+    href: "/#services-grow",
+    helpOption: "SEO / Conversion optimization",
   },
-  {
-    key: "education-system",
-    label: "I need an education management system",
-    recommendationTitle: "VILMS",
-    recommendationDescription: "Student management, attendance, records, communication and reports in one platform.",
+  "grow-retail": {
+    title: "SEO + Conversion Optimization",
+    description: "Make sure the right customers actually find the showroom.",
+    why: "A showroom only compounds once visibility and conversion are actively managed.",
+    tags: ["SEO", "Conversion Optimization"],
+    href: "/#services-grow",
+    helpOption: "SEO / Conversion optimization",
+  },
+  "grow-sme": {
+    title: "SEO + Conversion Optimization",
+    description: "Make sure the site converts the traffic it's already getting.",
+    why: "For most SMEs, the fastest path to more leads is fixing conversion on existing traffic before spending more to acquire it.",
+    tags: ["SEO", "Conversion Optimization"],
+    href: "/#services-grow",
+    helpOption: "SEO / Conversion optimization",
+  },
+  "digitize-education": {
+    title: "VILMS",
+    description: "Student management, attendance, records, communication and reports in one platform.",
+    why: "VILMS replaces registers and spreadsheets with one platform built around real academic workflows.",
     tags: ["VILMS"],
     href: "/products/vilms",
     helpOption: "VILMS",
   },
-  {
-    key: "digital-showroom",
-    label: "I need a digital showroom",
-    recommendationTitle: "SuperShowroom",
-    recommendationDescription: "A structured, digital way to present and sell a product range.",
-    tags: ["SuperShowroom"],
-    href: "/products/supershowroom",
-    helpOption: "SuperShowroom",
-  },
-  {
-    key: "gifting-solution",
-    label: "I need a corporate gifting solution",
-    recommendationTitle: "Gifting Solutions",
-    recommendationDescription: "Catalogue, client, quotation and order tracking in one connected workflow.",
+  "digitize-corporate": {
+    title: "Gifting Solutions",
+    description: "Catalogue, client, quotation and order tracking in one connected workflow.",
+    why: "Gifting Solutions replaces scattered emails and manual quotations with one connected workflow.",
     tags: ["Gifting Solutions"],
     href: "/products/gifting-solutions",
     helpOption: "Gifting Solutions",
   },
-];
+  "digitize-retail": {
+    title: "SuperShowroom",
+    description: "A structured, digital way to present and sell a product range.",
+    why: "SuperShowroom turns a static catalogue into a structured, explorable digital showroom.",
+    tags: ["SuperShowroom"],
+    href: "/products/supershowroom",
+    helpOption: "SuperShowroom",
+  },
+  "digitize-sme": {
+    title: "Website + Conversion Optimization",
+    description: "Rebuild the digital presence around a clear, trackable path to a lead.",
+    why: "SMEs rarely have one workflow narrow enough to justify a dedicated product yet — a conversion-focused website is usually the highest-leverage move.",
+    tags: ["Websites", "Conversion Optimization"],
+    href: "/#services-build",
+    helpOption: "Website design & development",
+  },
+};
+
+export function getFinderRecommendation(goal: string, businessType: string): FinderRecommendation | undefined {
+  return FINDER_MATRIX[`${goal}-${businessType}`];
+}
 
 // ---------------------------------------------------------------------------
 // Case studies (Section 12) — demo placeholders only

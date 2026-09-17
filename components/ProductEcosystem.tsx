@@ -10,7 +10,11 @@ function VilmsMock() {
   return (
     <div className="grid grid-cols-3 gap-2">
       {["Students", "Attendance", "Reports"].map((label, i) => (
-        <div key={label} className="rounded-lg border border-border bg-paper p-3">
+        <div
+          key={label}
+          style={{ transitionDelay: `${i * 60}ms` }}
+          className="rounded-lg border border-border bg-paper p-3 transition-transform duration-300 ease-[var(--ease-float)] group-hover/product:-translate-y-1"
+        >
           <div className="font-mono-ui text-[10px] uppercase tracking-wide text-ink-faint">{label}</div>
           <div className="mt-2 text-lg font-semibold text-ink">
             {i === 0 ? "1,240" : i === 1 ? "96%" : "18"}
@@ -25,7 +29,11 @@ function ShowroomMock() {
   return (
     <div className="grid grid-cols-4 gap-2">
       {[0, 1, 2, 3].map((i) => (
-        <div key={i} className="aspect-square rounded-lg border border-border bg-paper" />
+        <div
+          key={i}
+          style={{ transitionDelay: `${i * 50}ms` }}
+          className="aspect-square rounded-lg border border-border bg-paper transition-transform duration-300 ease-[var(--ease-float)] group-hover/product:scale-[1.06]"
+        />
       ))}
     </div>
   );
@@ -37,7 +45,10 @@ function GiftingMock() {
     <div className="flex items-center gap-1.5">
       {steps.map((s, i) => (
         <div key={s} className="flex items-center gap-1.5">
-          <div className="rounded-full border border-border bg-paper px-2.5 py-1 text-[11px] font-medium text-ink-soft">
+          <div
+            style={{ transitionDelay: `${i * 70}ms` }}
+            className="rounded-full border border-border bg-paper px-2.5 py-1 text-[11px] font-medium text-ink-soft transition-colors duration-300 group-hover/product:border-accent group-hover/product:bg-accent-soft group-hover/product:text-accent-strong"
+          >
             {s}
           </div>
           {i < steps.length - 1 && <span className="h-px w-4 bg-border-strong" />}
@@ -70,7 +81,7 @@ export default function ProductEcosystem() {
               <Reveal
                 key={product.slug}
                 delay={i * 80}
-                className="card-lift flex flex-col rounded-2xl border border-border bg-surface p-6"
+                className="group/product card-lift flex flex-col rounded-2xl border border-border bg-surface p-6"
               >
                 <div className="flex items-center justify-between gap-2">
                   <h3 className="text-xl text-ink">{product.name}</h3>
@@ -93,7 +104,11 @@ export default function ProductEcosystem() {
                 </ul>
 
                 <div className="mt-6">
-                  <Button href={`/products/${product.slug}`} variant="secondary" className="w-full">
+                  <Button
+                    href={`/products/${product.slug}`}
+                    variant="secondary"
+                    className="w-full transition-colors duration-300 group-hover/product:!border-ink group-hover/product:!bg-ink group-hover/product:!text-paper"
+                  >
                     {product.ctaLabel}
                     <IconArrowRight className="h-3.5 w-3.5" />
                   </Button>

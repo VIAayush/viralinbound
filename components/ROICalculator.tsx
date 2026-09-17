@@ -40,11 +40,13 @@ export default function ROICalculator() {
   const [current, setCurrent] = useState(1.5);
   const [potential, setPotential] = useState(3.5);
 
-  const { currentLeads, additional } = useMemo(() => {
+  const { currentLeads, potentialLeads, additional } = useMemo(() => {
     const c = Math.round(visitors * (current / 100));
     const p = Math.round(visitors * (potential / 100));
-    return { currentLeads: c, additional: Math.max(0, p - c) };
+    return { currentLeads: c, potentialLeads: p, additional: Math.max(0, p - c) };
   }, [visitors, current, potential]);
+
+  const maxLeads = Math.max(currentLeads, potentialLeads, 1);
 
   return (
     <section className="border-b border-border bg-surface">
@@ -69,17 +71,29 @@ export default function ROICalculator() {
             <div className="rounded-xl border border-border bg-surface p-5">
               <div className="font-mono-ui text-[10px] uppercase tracking-wide text-ink-faint">Current leads / month</div>
               <div className="mt-1 text-2xl font-semibold text-ink">{currentLeads.toLocaleString("en-IN")}</div>
+              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-surface-2">
+                <div
+                  className="h-full rounded-full bg-ink-faint transition-[width] duration-500 ease-[var(--ease-float)]"
+                  style={{ width: `${(currentLeads / maxLeads) * 100}%` }}
+                />
+              </div>
             </div>
             <div className="rounded-xl border border-accent bg-accent-soft p-5">
               <div className="font-mono-ui text-[10px] uppercase tracking-wide text-accent-strong">Potential additional leads / month</div>
               <div className="mt-1 text-2xl font-semibold text-accent-strong">+{additional.toLocaleString("en-IN")}</div>
+              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-surface/60">
+                <div
+                  className="h-full rounded-full bg-accent transition-[width] duration-500 ease-[var(--ease-float)]"
+                  style={{ width: `${(potentialLeads / maxLeads) * 100}%` }}
+                />
+              </div>
             </div>
           </div>
         </Reveal>
 
         <p className="mt-4 max-w-2xl text-xs text-ink-faint">
-          Estimates are illustrative and depend on actual business data, traffic quality and industry. They are not a
-          guarantee of results.
+          Illustrative estimate based on entered assumptions. Depends on actual business data, traffic quality and
+          industry — not a guarantee of results.
         </p>
         <div className="mt-5">
           <Button href="/#contact" variant="secondary">

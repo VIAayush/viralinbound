@@ -99,6 +99,7 @@ function MobileAccordion({ label, items }: { label: string; items: NavItem[] }) 
 
 export default function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -107,8 +108,23 @@ export default function Nav() {
     };
   }, [mobileOpen]);
 
+  useEffect(() => {
+    function onScroll() {
+      setScrolled(window.scrollY > 24);
+    }
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-paper/90 backdrop-blur supports-[backdrop-filter]:bg-paper/75">
+    <header
+      className={`sticky top-0 z-50 border-b transition-[background-color,border-color,box-shadow] duration-300 ${
+        scrolled || mobileOpen
+          ? "border-border bg-paper/90 shadow-[var(--shadow-sm)] backdrop-blur supports-[backdrop-filter]:bg-paper/75"
+          : "border-transparent bg-transparent"
+      }`}
+    >
       <Container>
         <div className="flex h-16 items-center justify-between">
           <Link href="/" onClick={() => setMobileOpen(false)}>
